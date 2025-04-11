@@ -2,12 +2,13 @@ name: Auto Update Heatmap Data
 
 on:
   schedule:
-    - cron: '*/1 * * * *'
-  workflow_dispatch:
+    - cron: '*/1 * * * *'  # 每分钟运行一次
+  workflow_dispatch:       # 允许手动触发
 
 jobs:
   update:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
@@ -23,9 +24,9 @@ jobs:
       - name: Generate New Heatmap Data
         run: python update_heatmap.py
 
-    - name: Commit and Push Changes
-      uses: ad-m/github-push-action@v0.6.0
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        branch: main
-        force: true
+      - name: Commit and Push Changes
+        uses: ad-m/github-push-action@v0.6.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: main
+          force: true
