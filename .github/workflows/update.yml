@@ -10,16 +10,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v3
+      - name: Checkout Repository
+        uses: actions/checkout@v3
 
-    - name: Setup Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.x'
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
 
-    - name: Generate New Heatmap Data
-      run: python update_heatmap.py
+      - name: Install shapely
+        run: pip install shapely
+
+      - name: Generate New Heatmap Data
+        run: python update_heatmap.py
 
     - name: Commit and Push Changes
       uses: ad-m/github-push-action@v0.6.0
