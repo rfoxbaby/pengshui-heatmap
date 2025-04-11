@@ -2,13 +2,12 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>彭水热力图</title>
+  <title>彭水实时热力图</title>
   <style>
     html, body, #container {
       height: 100%;
       margin: 0;
       padding: 0;
-      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     }
     #legend {
       position: absolute;
@@ -35,7 +34,7 @@
 <body>
   <div id="container"></div>
 
-  <!-- LOGO 显示 -->
+  <!-- LOGO -->
   <div id="logo">
     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Heatmap_icon.svg/120px-Heatmap_icon.svg.png" alt="Logo">
   </div>
@@ -49,7 +48,6 @@
     ❄️ <50：较冷
   </div>
 
-  <!-- 高德地图 API 加载 -->
   <script src="https://webapi.amap.com/maps?v=2.0&key=152e6b497fa8bdf8cef2b7c6880d34d3&plugin=AMap.HeatMap"></script>
 
   <script>
@@ -60,31 +58,34 @@
       zooms: [3, 18]
     });
 
-    // 添加缩放控件
-    AMap.plugin(['AMap.ToolBar'], function() {
-      map.addControl(new AMap.ToolBar());
-    });
+    var heatmap;
 
-    // 热力图数据
-    AMap.plugin('AMap.HeatMap', function () {
-      var heatmap = new AMap.HeatMap(map, {
+    AMap.plugin(["AMap.HeatMap", "AMap.ToolBar"], function () {
+      map.addControl(new AMap.ToolBar());
+
+      heatmap = new AMap.HeatMap(map, {
         radius: 25,
         opacity: [0.3, 0.9]
       });
 
-      heatmap.setDataSet({
-        data: [
-          { lng: 108.1666, lat: 29.2935, count: 95 },
-          { lng: 108.1710, lat: 29.2950, count: 85 },
-          { lng: 108.1600, lat: 29.2800, count: 75 },
-          { lng: 108.1550, lat: 29.3100, count: 65 },
-          { lng: 108.1500, lat: 29.3000, count: 55 },
-          { lng: 108.1450, lat: 29.2950, count: 45 },
-          { lng: 108.1400, lat: 29.2900, count: 35 }
-        ],
-        max: 100
-      });
+      loadHeatData(); // 初次加载
+      setInterval(loadHeatData, 30000); // 每30秒自动刷新
     });
+
+    function loadHeatData() {
+      fetch('heatmap-data.json?t=' + Date.now()) // 避免缓存
+        .then(res => res.json())
+        .then(data => {
+          heatmap.setDataSet({
+            data: data,
+            max: 100
+          });
+          console.log("热力数据已刷新", new Date().toLocaleTimeString());
+        })
+        .catch(err => {
+          console.error("热力数据加载失败", err);
+        });
+    }
   </script>
 </body>
 </html>
