@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>彭水热力图</title>
+  <style>
+    html, body, #container {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    }
+    #legend {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      background: rgba(255,255,255,0.95);
+      padding: 12px 16px;
+      font-size: 14px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.15);
+      line-height: 1.8;
+    }
+    #logo {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      z-index: 1000;
+    }
+    #logo img {
+      height: 40px;
+    }
+  </style>
+</head>
+<body>
+  <div id="container"></div>
+
+  <!-- LOGO 显示 -->
+  <div id="logo">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Heatmap_icon.svg/120px-Heatmap_icon.svg.png" alt="Logo">
+  </div>
+
+  <!-- 图例 -->
+  <div id="legend">
+    <strong>热力等级说明：</strong><br>
+    🔥 90-100：非常热门<br>
+    🌡️ 70-89：较热<br>
+    🌀 50-69：一般<br>
+    ❄️ <50：较冷
+  </div>
+
+  <!-- 高德地图 API 加载 -->
+  <script src="https://webapi.amap.com/maps?v=2.0&key=152e6b497fa8bdf8cef2b7c6880d34d3&plugin=AMap.HeatMap"></script>
+
+  <script>
+    var map = new AMap.Map('container', {
+      resizeEnable: true,
+      zoom: 12,
+      center: [108.1666, 29.2935],
+      zooms: [3, 18]
+    });
+
+    // 添加缩放控件
+    AMap.plugin(['AMap.ToolBar'], function() {
+      map.addControl(new AMap.ToolBar());
+    });
+
+    // 热力图数据
+    AMap.plugin('AMap.HeatMap', function () {
+      var heatmap = new AMap.HeatMap(map, {
+        radius: 25,
+        opacity: [0.3, 0.9]
+      });
+
+      heatmap.setDataSet({
+        data: [
+          { lng: 108.1666, lat: 29.2935, count: 95 },
+          { lng: 108.1710, lat: 29.2950, count: 85 },
+          { lng: 108.1600, lat: 29.2800, count: 75 },
+          { lng: 108.1550, lat: 29.3100, count: 65 },
+          { lng: 108.1500, lat: 29.3000, count: 55 },
+          { lng: 108.1450, lat: 29.2950, count: 45 },
+          { lng: 108.1400, lat: 29.2900, count: 35 }
+        ],
+        max: 100
+      });
+    });
+  </script>
+</body>
+</html>
