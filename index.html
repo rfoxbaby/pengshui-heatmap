@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>彭水实时热力图</title>
+  <title>彭水实时热力图（密集模拟）</title>
   <style>
     html, body, #container {
       height: 100%;
@@ -33,13 +33,9 @@
 </head>
 <body>
   <div id="container"></div>
-
-  <!-- LOGO -->
   <div id="logo">
     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Heatmap_icon.svg/120px-Heatmap_icon.svg.png" alt="Logo">
   </div>
-
-  <!-- 图例 -->
   <div id="legend">
     <strong>热力等级说明：</strong><br>
     🔥 90-100：非常热门<br>
@@ -47,40 +43,32 @@
     🌀 50-69：一般<br>
     ❄️ <50：较冷
   </div>
-
   <script src="https://webapi.amap.com/maps?v=2.0&key=152e6b497fa8bdf8cef2b7c6880d34d3&plugin=AMap.HeatMap"></script>
-
   <script>
     var map = new AMap.Map('container', {
       resizeEnable: true,
       zoom: 12,
       center: [108.1666, 29.2935],
-      zooms: [3, 18]
+      zooms: [10, 18]
     });
-
     var heatmap;
-
     AMap.plugin(["AMap.HeatMap", "AMap.ToolBar"], function () {
       map.addControl(new AMap.ToolBar());
-
       heatmap = new AMap.HeatMap(map, {
         radius: 25,
         opacity: [0.3, 0.9]
       });
-
-      loadHeatData(); // 初次加载
-      setInterval(loadHeatData, 30000); // 每30秒自动刷新
+      loadHeatData();
+      setInterval(loadHeatData, 30000);
     });
-
     function loadHeatData() {
-      fetch('heatmap-data.json?t=' + Date.now()) // 避免缓存
+      fetch('heatmap-data.json?t=' + Date.now())
         .then(res => res.json())
         .then(data => {
           heatmap.setDataSet({
             data: data,
             max: 100
           });
-          console.log("热力数据已刷新", new Date().toLocaleTimeString());
         })
         .catch(err => {
           console.error("热力数据加载失败", err);
