@@ -31,9 +31,6 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // 添加全景图片点击事件
     initPanoramaClick();
-    
-    // 添加介绍部分滚动互动效果
-    initIntroScrollEffects();
 });
 
 // Simple title animation
@@ -480,52 +477,8 @@ function initPanoramaClick() {
 
 // 处理介绍部分的滚动互动效果
 function initIntroScrollEffects() {
-    const introSection = document.querySelector('.intro-enhanced');
-    const introContent = document.querySelector('.intro-content');
-    const introBg = document.querySelector('.intro-bg');
-    
-    if (!introSection || !introContent || !introBg) return;
-    
-    // 初始化时先隐藏内容
-    setTimeout(() => {
-        if (isElementInViewport(introSection)) {
-            introSection.classList.add('in-view');
-            introContent.classList.remove('scroll-hidden');
-        }
-    }, 500);
-    
-    // 滚动监听
-    window.addEventListener('scroll', () => {
-        // 检查介绍部分是否在视口内
-        if (isElementInViewport(introSection)) {
-            introSection.classList.add('in-view');
-            introContent.classList.remove('scroll-hidden');
-            
-            // 视差滚动效果
-            const rect = introSection.getBoundingClientRect();
-            const scrollPosition = window.scrollY;
-            const windowHeight = window.innerHeight;
-            const sectionTop = rect.top + scrollPosition;
-            const scrollProgress = (scrollPosition - sectionTop + windowHeight) / (rect.height + windowHeight);
-            
-            if (scrollProgress >= 0 && scrollProgress <= 1) {
-                const translateY = scrollProgress * 50; // 50px是最大移动距离
-                introBg.style.transform = `translateZ(-50px) translateY(-${translateY}px) scale(1.5)`;
-            }
-        } else {
-            introSection.classList.remove('in-view');
-            introContent.classList.add('scroll-hidden');
-        }
-    });
-    
-    // 检查元素是否在视口内的辅助函数
-    function isElementInViewport(el) {
-        const rect = el.getBoundingClientRect();
-        return (
-            rect.top <= (window.innerHeight * 0.75) &&
-            rect.bottom >= (window.innerHeight * 0.25)
-        );
-    }
+    // 移除整个函数内容，因为我们不再需要这些效果
+    return;
 }
 
 // 保留但注释掉全景功能代码，以便将来可能需要时恢复

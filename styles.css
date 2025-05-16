@@ -422,8 +422,8 @@ section.active {
 /* 增强的第二章节样式 */
 .intro-enhanced {
     position: relative;
-    min-height: 100vh; /* Full screen height */
-    height: 100vh; /* Enforce full screen height */
+    min-height: 100vh;
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -439,8 +439,6 @@ section.active {
     display: none;
 }
 
-/* Background removed as requested */
-
 .intro-content {
     position: relative;
     text-align: center;
@@ -448,10 +446,6 @@ section.active {
     width: 100%;
     padding: 60px;
     z-index: 2;
-    transform: translateY(0) translateZ(0);
-    transform-style: preserve-3d;
-    transition: transform 0.5s ease, opacity 0.5s ease;
-    background-color: transparent;
     opacity: 1;
     display: flex;
     flex-direction: column;
@@ -459,77 +453,25 @@ section.active {
     align-items: center;
 }
 
-.char-effect {
-    display: inline-block;
-    opacity: 0;
-    transform: translateY(20px);
-    animation: char-appear 0.5s forwards;
-    animation-delay: calc(var(--char-index, 0) * 0.05s);
-}
-
-@keyframes char-appear {
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.intro-content.scroll-hidden {
-    opacity: 0;
-    transform: translateY(50px) translateZ(-30px);
-}
-
 .intro-enhanced h2 {
-    font-size: 4rem; /* Match the hero h1 size */
+    font-size: 4rem;
     margin-bottom: 30px;
     color: var(--primary-color);
     text-shadow: 0 0 20px rgba(212, 170, 55, 0.5);
     position: relative;
     display: inline-block;
-    transform: translateZ(20px) scale(0.9);
-    opacity: 0;
-    transition: transform 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
-                text-shadow 1.2s ease,
-                opacity 1.2s ease;
-    line-height: 1.4; /* Match hero h1 line-height */
+    line-height: 1.4;
     letter-spacing: 0.02em;
 }
 
-.intro-enhanced.in-view h2 {
-    transform: translateZ(40px) scale(1);
-    text-shadow: 0 0 30px rgba(212, 170, 55, 0.8);
-    opacity: 1;
-    animation: glow-pulse 3s infinite alternate ease-in-out;
-}
-
-.intro-enhanced h2:hover {
-    animation-play-state: paused;
-    transform: translateZ(50px) scale(1.05);
-    cursor: pointer;
-}
-
 .intro-enhanced p {
-    font-size: 1.5rem; /* Match the hero subtitle size */
+    font-size: 1.5rem;
     line-height: 1.6;
-    max-width: 800px; /* Match hero subtitle max-width */
+    max-width: 800px;
     margin: 0 auto;
     color: var(--light-color);
     text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);
-    transform: translateZ(10px) translateY(20px);
-    opacity: 0;
-    transition: transform 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.5s,
-                opacity 1s ease 0.5s;
     letter-spacing: normal;
-}
-
-.intro-enhanced.in-view p {
-    transform: translateZ(20px) translateY(0);
-    opacity: 1;
-}
-
-.intro-enhanced p:hover {
-    transform: translateZ(25px) translateY(-5px);
-    text-shadow: 0 5px 15px rgba(0, 0, 0, 0.9);
 }
 
 /* Two-line paragraph style for the intro-enhanced section */
@@ -543,24 +485,6 @@ section.active {
 .two-line-text .line2 {
     display: block;
     line-height: 1.6;
-    opacity: 0;
-    transform: translateY(20px);
-    animation: line-appear 0.8s forwards;
-}
-
-.two-line-text .line1 {
-    animation-delay: 0.3s;
-}
-
-.two-line-text .line2 {
-    animation-delay: 0.6s;
-}
-
-@keyframes line-appear {
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
 }
 
 .intro-enhanced.in-view .two-line-text .line1,
@@ -1556,6 +1480,11 @@ footer .logo:hover {
 
 /* Responsive Styles */
 @media (max-width: 1024px) {
+    :root {
+        --primary-color: #d4aa37;
+        --primary-glow: rgba(212, 170, 55, 0.5);
+    }
+
     .level {
         flex-direction: column !important;
         gap: 30px;
@@ -1576,47 +1505,288 @@ footer .logo:hover {
     a, button {
         cursor: pointer;
     }
+
+    .intro-enhanced h2 {
+        font-size: 3rem;
+    }
+
+    .intro-enhanced p {
+        font-size: 1.2rem;
+    }
+
+    .pillar-gallery {
+        gap: 20px;
+    }
+
+    .panorama-viewer {
+        height: 400px;
+    }
+
+    .ceiling-single-image {
+        width: 300px;
+        height: 300px;
+    }
 }
 
 @media (max-width: 768px) {
+    :root {
+        --section-padding: 40px;
+    }
+
     nav {
         padding: 15px 20px;
+        background-color: rgba(0, 0, 0, 0.8);
     }
     
-    nav ul li {
-        margin-left: 15px;
-    }
-    
-    .hero h1 {
-        font-size: 3rem;
-    }
-    
-    .section-header h2, .staircase h2, .ceiling h2, .artifacts h2, .intro h2 {
-        font-size: 2rem;
-    }
-    
-    .intro-enhanced h2 {
-        font-size: 3.5rem;
-        margin-bottom: 30px;
-    }
-    
-    .intro-enhanced p {
-        font-size: 1.6rem;
-        max-width: 90%;
-    }
-}
-
-@media (max-width: 480px) {
     nav ul {
         display: none;
     }
     
     .hero h1 {
         font-size: 2.5rem;
+        padding: 0 20px;
     }
     
     .hero .subtitle {
         font-size: 1.2rem;
+        padding: 0 20px;
+    }
+
+    .intro-enhanced {
+        min-height: auto;
+        height: auto;
+        padding: 60px 0;
+    }
+    
+    .intro-enhanced h2 {
+        font-size: 2.2rem;
+        margin-bottom: 20px;
+    }
+    
+    .intro-enhanced p {
+        font-size: 1.1rem;
+        padding: 0 20px;
+    }
+
+    .section-header h2, 
+    .staircase h2, 
+    .ceiling h2, 
+    .artifacts h2 {
+        font-size: 1.8rem;
+        padding: 0 20px;
+    }
+
+    .section-header p {
+        font-size: 1rem;
+        padding: 0 20px;
+    }
+
+    .pillar {
+        width: calc(100% - 40px);
+        margin: 0 20px;
+    }
+
+    .pillar h3 {
+        font-size: 1.2rem;
+    }
+
+    .pillar p {
+        font-size: 0.9rem;
+    }
+
+    .panorama-viewer {
+        height: 300px;
+        margin: 0 20px;
+    }
+
+    .panorama-info {
+        margin: 20px;
+        padding: 20px;
+    }
+
+    .panorama-info-row {
+        font-size: 0.95rem;
+    }
+
+    .level-content h3 {
+        font-size: 1.4rem;
+    }
+
+    .level-content p {
+        font-size: 0.95rem;
+    }
+
+    .ceiling-single-image {
+        width: 250px;
+        height: 250px;
+    }
+
+    .ceiling-description {
+        margin: 20px;
+        padding: 20px;
+    }
+
+    .ceiling-description ul {
+        font-size: 0.95rem;
+    }
+
+    .artifact {
+        width: calc(100% - 40px);
+        margin: 0 20px;
+    }
+
+    .artifact h3 {
+        font-size: 1.2rem;
+    }
+
+    .artifact p {
+        font-size: 0.9rem;
+    }
+
+    .section-content {
+        padding: 40px 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    :root {
+        --section-padding: 30px;
+    }
+
+    .hero h1 {
+        font-size: 2rem;
+    }
+    
+    .hero .subtitle {
+        font-size: 1rem;
+    }
+
+    .intro-enhanced h2 {
+        font-size: 1.8rem;
+    }
+
+    .intro-enhanced p {
+        font-size: 1rem;
+    }
+
+    .section-header h2, 
+    .staircase h2, 
+    .ceiling h2, 
+    .artifacts h2 {
+        font-size: 1.6rem;
+    }
+
+    .pillar-image {
+        height: 200px;
+    }
+
+    .panorama-viewer {
+        height: 250px;
+    }
+
+    .level-image {
+        height: 200px;
+    }
+
+    .ceiling-single-image {
+        width: 200px;
+        height: 200px;
+    }
+
+    .lightbox-content {
+        width: 90%;
+    }
+
+    .lightbox-caption {
+        font-size: 1rem;
+    }
+
+    .section-divider {
+        height: 60px;
+    }
+}
+
+/* 添加针对较小屏幕的额外优化 */
+@media (max-width: 360px) {
+    .hero h1 {
+        font-size: 1.8rem;
+    }
+
+    .hero .subtitle {
+        font-size: 0.9rem;
+    }
+
+    .intro-enhanced h2 {
+        font-size: 1.6rem;
+    }
+
+    .section-header h2, 
+    .staircase h2, 
+    .ceiling h2, 
+    .artifacts h2 {
+        font-size: 1.4rem;
+    }
+
+    .pillar-image,
+    .level-image,
+    .artifact-image {
+        height: 180px;
+    }
+
+    .panorama-viewer {
+        height: 200px;
+    }
+
+    .ceiling-single-image {
+        width: 180px;
+        height: 180px;
+    }
+}
+
+/* 添加横屏模式的优化 */
+@media (max-height: 600px) and (orientation: landscape) {
+    .hero {
+        height: auto;
+        min-height: 100vh;
+        padding: 100px 0 50px;
+    }
+
+    .intro-enhanced {
+        height: auto;
+        min-height: auto;
+        padding: 50px 0;
+    }
+
+    .section-divider {
+        height: 40px;
+    }
+}
+
+/* 优化触摸交互 */
+@media (hover: none) {
+    .pillar:hover,
+    .artifact:hover,
+    .level:hover {
+        transform: none;
+    }
+
+    .pillar-link::after,
+    .artifact-link::after,
+    .level-link::after {
+        transform: translateY(0);
+        opacity: 0.8;
+    }
+
+    .cursor-glow {
+        display: none;
+    }
+
+    * {
+        cursor: auto !important;
+    }
+
+    a, button {
+        cursor: pointer !important;
     }
 }
 
@@ -1975,5 +2145,142 @@ footer .logo:hover {
     background-position: center;
     opacity: 0.2;
     z-index: 0;
+}
+
+/* Concept Cards Styles */
+.concept-cards {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 60px;
+    width: 100%;
+    max-width: 1200px;
+}
+
+.concept-card {
+    flex: 1;
+    background: rgba(29, 29, 31, 0.8);
+    border-radius: 15px;
+    padding: 40px 30px;
+    text-align: center;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(212, 170, 55, 0.2);
+    transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.concept-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, rgba(212, 170, 55, 0.1), transparent);
+    opacity: 0;
+    transition: opacity 0.6s ease;
+}
+
+.concept-card:hover {
+    transform: translateY(-10px);
+    border-color: rgba(212, 170, 55, 0.4);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4),
+                0 0 30px rgba(212, 170, 55, 0.2);
+}
+
+.concept-card:hover::before {
+    opacity: 1;
+}
+
+.card-number {
+    display: block;
+    font-size: 1.2rem;
+    color: var(--primary-color);
+    margin-bottom: 20px;
+    font-family: 'Noto Serif SC', serif;
+    opacity: 0.8;
+    transition: all 0.4s ease;
+}
+
+.concept-card:hover .card-number {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+.concept-card h3 {
+    color: var(--primary-color);
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    position: relative;
+    display: inline-block;
+    font-weight: 500;
+}
+
+.concept-card h3::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 2px;
+    background-color: var(--primary-color);
+    transition: width 0.4s ease;
+}
+
+.concept-card:hover h3::after {
+    width: 80%;
+}
+
+.concept-card p {
+    color: var(--light-color);
+    font-size: 1.1rem;
+    line-height: 1.8;
+    margin: 0;
+    opacity: 0.9;
+    transition: opacity 0.4s ease;
+}
+
+.concept-card:hover p {
+    opacity: 1;
+}
+
+/* Responsive styles for concept cards */
+@media (max-width: 768px) {
+    .concept-cards {
+        flex-direction: column;
+        gap: 20px;
+        padding: 0 20px;
+    }
+
+    .concept-card {
+        padding: 30px 20px;
+    }
+
+    .card-number {
+        font-size: 1rem;
+        margin-bottom: 15px;
+    }
+
+    .concept-card h3 {
+        font-size: 1.5rem;
+        margin-bottom: 15px;
+    }
+
+    .concept-card p {
+        font-size: 1rem;
+        line-height: 1.6;
+    }
+}
+
+@media (max-width: 480px) {
+    .concept-card h3 {
+        font-size: 1.3rem;
+    }
+
+    .concept-card p {
+        font-size: 0.95rem;
+    }
 }
  
