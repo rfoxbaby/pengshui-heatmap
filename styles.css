@@ -9,8 +9,8 @@
     --accent-color: #86683e;
     --background-color: #000000;
     --text-color: #f5f5f7;
-    --transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-    --hover-transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+    --transition: transform 0.3s ease, opacity 0.3s ease;
+    --hover-transition: transform 0.4s ease, opacity 0.4s ease;
 }
 
 * {
@@ -22,6 +22,7 @@
 
 html {
     scroll-behavior: smooth;
+    cursor: none;
 }
 
 body {
@@ -30,9 +31,36 @@ body {
     color: var(--text-color);
     line-height: 1.6;
     overflow-x: hidden;
-    cursor: none;
     margin: 0;
     padding: 0;
+    cursor: none;
+}
+
+/* 确保所有可交互元素都隐藏默认鼠标 */
+a, button, input, textarea, select,
+.pillar-link, .level-link, .ceiling-link, .artifact-link,
+.close-lightbox, .nav-link, .scroll-indicator,
+.concept-card, .panorama-viewer, .lightbox-content {
+    cursor: none !important;
+}
+
+/* 移动设备样式 */
+@media (max-width: 768px) {
+    * {
+        cursor: auto !important;
+    }
+    
+    body {
+        cursor: auto !important;
+    }
+    
+    a, button, input, textarea, select {
+        cursor: pointer !important;
+    }
+    
+    .custom-cursor {
+        display: none !important;
+    }
 }
 
 .container {
@@ -61,50 +89,84 @@ a:hover {
     color: var(--primary-color);
 }
 
+/* Performance Optimizations */
+.gpu-accelerated {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+    will-change: transform;
+}
+
+/* Reduced Animation Classes */
+.fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: var(--transition);
+}
+
+.fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.scale-in {
+    opacity: 0;
+    transform: scale(0.95);
+    transition: var(--transition);
+}
+
+.scale-in.visible {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* Optimized Hover Effects */
+.hover-lift {
+    transition: var(--hover-transition);
+}
+
+.hover-lift:hover {
+    transform: translateY(-5px);
+}
+
+.hover-glow {
+    transition: var(--hover-transition);
+}
+
+.hover-glow:hover {
+    box-shadow: 0 5px 15px rgba(212, 170, 55, 0.2);
+}
+
+/* Simplified Animations */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+/* Optimized Media Queries */
+@media (max-width: 1024px) {
+    .gpu-accelerated {
+        transform: none;
+        backface-visibility: visible;
+        perspective: none;
+        will-change: auto;
+    }
+    
+    .hover-lift:hover,
+    .hover-glow:hover {
+        transform: none;
+        box-shadow: none;
+    }
+}
+
 /* Enhanced Cursor Glow Effect */
 .cursor-glow {
-    position: fixed;
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(212, 170, 55, 0.7) 0%, rgba(212, 170, 55, 0) 70%);
-    pointer-events: none;
-    left: 0;
-    top: 0;
-    margin-left: -15px;
-    margin-top: -15px;
-    z-index: 9999;
-    mix-blend-mode: overlay;
-    filter: blur(7px);
-    transition: width 0.3s cubic-bezier(0.075, 0.82, 0.165, 1), 
-                height 0.3s cubic-bezier(0.075, 0.82, 0.165, 1), 
-                opacity 0.3s cubic-bezier(0.075, 0.82, 0.165, 1),
-                background 0.3s cubic-bezier(0.075, 0.82, 0.165, 1);
-}
-
-/* Improved cursor effects over interactive elements */
-a:hover ~ .cursor-glow,
-button:hover ~ .cursor-glow {
-    width: 40px;
-    height: 40px;
-    opacity: 0.9;
-    background: radial-gradient(circle, rgba(212, 170, 55, 0.8) 0%, rgba(212, 170, 55, 0) 70%);
-}
-
-.pillar:hover ~ .cursor-glow,
-.artifact:hover ~ .cursor-glow {
-    width: 50px;
-    height: 50px;
-    opacity: 0.8;
-    background: radial-gradient(circle, rgba(212, 170, 55, 0.9) 0%, rgba(212, 170, 55, 0.1) 70%);
-}
-
-.sunbird:hover ~ .cursor-glow {
-    width: 60px;
-    height: 60px;
-    opacity: 0.95;
-    background: radial-gradient(circle, rgba(255, 215, 0, 0.9) 0%, rgba(212, 170, 55, 0) 70%);
-    filter: blur(10px);
+    display: none;
 }
 
 /* Header Styles */
@@ -327,11 +389,6 @@ nav ul li a:hover::after {
     }
 }
 
-@keyframes fadeIn {
-    from {opacity: 0;}
-    to {opacity: 1;}
-}
-
 @keyframes waveAnimation {
     0%, 100% { 
         transform: translateY(0);
@@ -472,6 +529,7 @@ section.active {
     color: var(--light-color);
     text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);
     letter-spacing: normal;
+    font-weight: bold;
 }
 
 /* Two-line paragraph style for the intro-enhanced section */
@@ -540,7 +598,7 @@ section.active {
     overflow: hidden;
     position: relative;
     transition: var(--hover-transition);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
     transform-style: preserve-3d;
     opacity: 0;
     transform: translateY(30px);
@@ -592,8 +650,7 @@ section.active {
 }
 
 .pillar:hover {
-    transform: translateY(-15px) scale(1.02);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+    transform: translateY(-5px);
 }
 
 .pillar:hover::before {
@@ -605,27 +662,26 @@ section.active {
     display: block;
     position: relative;
     overflow: hidden;
-    cursor: pointer;
+    cursor: none;
 }
 
 .pillar-link::after {
-    content: '查看大图';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: rgba(0, 0, 0, 0.7);
-    color: var(--primary-color);
-    padding: 10px;
-    text-align: center;
-    transform: translateY(100%);
-    transition: var(--hover-transition);
-    font-size: 0.9rem;
-    z-index: 3;
+    content: '';
+    width: 20px;
+    height: 20px;
+    background: radial-gradient(circle, rgba(212, 170, 55, 0.8) 0%, rgba(212, 170, 55, 0.2) 70%, transparent 100%);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    filter: blur(2px);
+    opacity: 0;
+    transition: opacity 0.3s ease;
 }
 
 .pillar-link:hover::after {
-    transform: translateY(0);
+    opacity: 1;
 }
 
 .pillar-image {
@@ -655,8 +711,8 @@ section.active {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(212, 170, 55, 0.2);
-    opacity: 0;
+    background: rgba(212, 170, 55, 0.2);
+    opacity: 0.3;
     transition: var(--hover-transition);
     z-index: 2;
 }
@@ -828,19 +884,10 @@ section.active {
     align-items: flex-start;
     position: relative;
     overflow: hidden;
-    border-left: 3px solid var(--primary-color);
 }
 
 .panorama-info::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    height: 100%;
-    width: 3px;
-    background: linear-gradient(to bottom, var(--primary-color), rgba(212, 170, 55, 0.2));
-    z-index: 1;
-    box-shadow: 0 0 20px rgba(212, 170, 55, 0.5);
+    display: none;
 }
 
 .panorama-info::after {
@@ -850,76 +897,65 @@ section.active {
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(45deg, rgba(212, 170, 55, 0.05), transparent 70%);
+    background: linear-gradient(45deg, rgba(212, 170, 55, 0.05), transparent);
     opacity: 0.7;
     pointer-events: none;
 }
 
 .panorama-info-row {
-    width: 100%;
-    margin-bottom: 18px;
-    font-size: 1.1rem;
-    line-height: 1.15;
-    text-align: left;
     position: relative;
-    padding-right: 20px;
-    color: #f0f0f0;
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+    font-size: 1.1rem;
+    line-height: 1.8;
+    margin-bottom: 20px;
+    padding: 0;
+    opacity: 0.9;
+    transition: var(--hover-transition);
+    text-align: left;
 }
 
 .panorama-info-row:nth-child(2),
 .panorama-info-row:nth-child(3),
 .panorama-info-row:nth-child(4) {
-    margin-bottom: 3px !important; /* 极小的间距，确保优先级 */
+    margin-left: 0;
+    line-height: 1.8;
+    margin-bottom: 20px;
 }
 
 .panorama-info-row:first-child {
-    font-weight: 500;
     font-size: 1.2rem;
     color: var(--primary-color);
-    margin-bottom: 25px;
+    margin-bottom: 20px;
+    opacity: 1;
+    line-height: 1.8;
 }
 
 .panorama-info-row:last-child {
-    margin-bottom: 0;
-    font-weight: 600;
+    font-size: 1.2rem;
     color: var(--primary-color);
-    padding: 15px 20px;
-    font-size: 1.25rem;
-    line-height: 1.6;
-    letter-spacing: 0.03em;
-    text-align: center;
-    border-top: 1px solid rgba(212, 170, 55, 0.3);
-    border-bottom: 1px solid rgba(212, 170, 55, 0.3);
-    background: linear-gradient(to right, rgba(20, 20, 22, 0), rgba(20, 20, 22, 0.6), rgba(20, 20, 22, 0));
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    margin-top: 20px;
+    padding: 0;
+    opacity: 1;
     position: relative;
-    transform: translateY(0);
-    transition: transform 0.4s ease, text-shadow 0.4s ease;
+    transition: var(--hover-transition);
+    font-weight: 700;
+    line-height: 1.8;
+    margin-bottom: 20px;
+}
+
+.panorama-info-row:last-child br {
+    content: "";
+    display: block;
+    margin: 15px 0;
 }
 
 .panorama-info-row:last-child:hover {
-    transform: translateY(-3px);
     text-shadow: 0 3px 8px rgba(212, 170, 55, 0.4);
 }
 
+/* Remove the before and after pseudo-elements */
 .panorama-info-row:last-child::before,
 .panorama-info-row:last-child::after {
-    content: '';
-    position: absolute;
-    width: 30px;
-    height: 2px;
-    background-color: var(--primary-color);
-    top: 50%;
-    transform: translateY(-50%);
-}
-
-.panorama-info-row:last-child::before {
-    left: 15px;
-}
-
-.panorama-info-row:last-child::after {
-    right: 15px;
+    display: none;
 }
 
 /* Enhanced Staircase Section */
@@ -941,7 +977,7 @@ section.active {
     background-image: url('images/staircase-bg.jpg');
     background-size: cover;
     background-position: center;
-    background-attachment: fixed;
+    background-attachment: scroll;
     filter: brightness(0.3);
     z-index: -1;
     will-change: transform;
@@ -1005,27 +1041,26 @@ section.active {
     width: 50%;
     overflow: hidden;
     border-radius: 15px;
-    cursor: pointer;
+    cursor: none;
 }
 
 .level-link::after {
-    content: '查看大图';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: rgba(0, 0, 0, 0.7);
-    color: var(--primary-color);
-    padding: 12px;
-    text-align: center;
-    transform: translateY(100%);
-    transition: var(--hover-transition);
-    font-size: 1rem;
-    z-index: 5;
+    content: '';
+    width: 20px;
+    height: 20px;
+    background: radial-gradient(circle, rgba(212, 170, 55, 0.8) 0%, rgba(212, 170, 55, 0.2) 70%, transparent 100%);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    filter: blur(2px);
+    opacity: 0;
+    transition: opacity 0.3s ease;
 }
 
 .level-link:hover::after {
-    transform: translateY(0);
+    opacity: 1;
 }
 
 .level-image {
@@ -1342,7 +1377,7 @@ section.active {
     background-color: rgba(29, 29, 31, 0.8);
     border-radius: 15px;
     overflow: hidden;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
     transition: var(--hover-transition);
     opacity: 0;
     transform: translateY(30px);
@@ -1373,8 +1408,7 @@ section.active {
 }
 
 .artifact:hover {
-    transform: translateY(-15px) scale(1.02);
-    box-shadow: 0 25px 45px rgba(0, 0, 0, 0.6);
+    transform: translateY(-5px);
 }
 
 .artifact:hover::before {
@@ -1410,8 +1444,8 @@ section.active {
     left: 0;
     right: 0;
     bottom: 0;
-    background: radial-gradient(circle at center, rgba(212, 170, 55, 0.3), transparent);
-    opacity: 0;
+    background: rgba(212, 170, 55, 0.2);
+    opacity: 0.3;
     transition: var(--hover-transition);
     z-index: 2;
 }
@@ -1480,9 +1514,32 @@ footer .logo:hover {
 
 /* Responsive Styles */
 @media (max-width: 1024px) {
-    :root {
-        --primary-color: #d4aa37;
-        --primary-glow: rgba(212, 170, 55, 0.5);
+    .gpu-accelerated {
+        transform: none;
+        backface-visibility: visible;
+        perspective: none;
+        will-change: auto;
+    }
+    
+    .hover-lift:hover,
+    .hover-glow:hover {
+        transform: none;
+        box-shadow: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .gpu-accelerated {
+        transform: none;
+        backface-visibility: visible;
+        perspective: none;
+        will-change: auto;
+    }
+    
+    .hover-lift:hover,
+    .hover-glow:hover {
+        transform: none;
+        box-shadow: none;
     }
 
     .level {
@@ -1528,28 +1585,39 @@ footer .logo:hover {
     }
 }
 
-@media (max-width: 768px) {
-    :root {
-        --section-padding: 40px;
-    }
-
-    nav {
-        padding: 15px 20px;
-        background-color: rgba(0, 0, 0, 0.8);
+@media (max-width: 480px) {
+    .gpu-accelerated {
+        transform: none;
+        backface-visibility: visible;
+        perspective: none;
+        will-change: auto;
     }
     
-    nav ul {
+    .hover-lift:hover,
+    .hover-glow:hover {
+        transform: none;
+        box-shadow: none;
+    }
+
+    .level {
+        flex-direction: column !important;
+        gap: 30px;
+    }
+    
+    .level-image, .level-content {
+        width: 100%;
+    }
+    
+    body {
+        cursor: auto;
+    }
+    
+    .cursor-glow {
         display: none;
     }
     
-    .hero h1 {
-        font-size: 2.5rem;
-        padding: 0 20px;
-    }
-    
-    .hero .subtitle {
-        font-size: 1.2rem;
-        padding: 0 20px;
+    a, button {
+        cursor: pointer;
     }
 
     .intro-enhanced {
@@ -1648,72 +1716,39 @@ footer .logo:hover {
     }
 }
 
-@media (max-width: 480px) {
-    :root {
-        --section-padding: 30px;
-    }
-
-    .hero h1 {
-        font-size: 2rem;
+@media (max-width: 360px) {
+    .gpu-accelerated {
+        transform: none;
+        backface-visibility: visible;
+        perspective: none;
+        will-change: auto;
     }
     
-    .hero .subtitle {
-        font-size: 1rem;
+    .hover-lift:hover,
+    .hover-glow:hover {
+        transform: none;
+        box-shadow: none;
     }
 
-    .intro-enhanced h2 {
-        font-size: 1.8rem;
+    .level {
+        flex-direction: column !important;
+        gap: 30px;
     }
-
-    .intro-enhanced p {
-        font-size: 1rem;
+    
+    .level-image, .level-content {
+        width: 100%;
     }
-
-    .section-header h2, 
-    .staircase h2, 
-    .ceiling h2, 
-    .artifacts h2 {
-        font-size: 1.6rem;
+    
+    body {
+        cursor: auto;
     }
-
-    .pillar-image {
-        height: 200px;
+    
+    .cursor-glow {
+        display: none;
     }
-
-    .panorama-viewer {
-        height: 250px;
-    }
-
-    .level-image {
-        height: 200px;
-    }
-
-    .ceiling-single-image {
-        width: 200px;
-        height: 200px;
-    }
-
-    .lightbox-content {
-        width: 90%;
-    }
-
-    .lightbox-caption {
-        font-size: 1rem;
-    }
-
-    .section-divider {
-        height: 60px;
-    }
-}
-
-/* 添加针对较小屏幕的额外优化 */
-@media (max-width: 360px) {
-    .hero h1 {
-        font-size: 1.8rem;
-    }
-
-    .hero .subtitle {
-        font-size: 0.9rem;
+    
+    a, button {
+        cursor: pointer;
     }
 
     .intro-enhanced h2 {
@@ -1743,7 +1778,6 @@ footer .logo:hover {
     }
 }
 
-/* 添加横屏模式的优化 */
 @media (max-height: 600px) and (orientation: landscape) {
     .hero {
         height: auto;
@@ -1762,7 +1796,6 @@ footer .logo:hover {
     }
 }
 
-/* 优化触摸交互 */
 @media (hover: none) {
     .pillar:hover,
     .artifact:hover,
@@ -1867,28 +1900,26 @@ footer .logo:hover {
     display: block;
     position: relative;
     overflow: hidden;
-    cursor: pointer;
-    border-radius: 50%;
+    cursor: none;
 }
 
 .ceiling-link::after {
-    content: '查看大图';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: rgba(0, 0, 0, 0.7);
-    color: var(--primary-color);
-    padding: 10px 0;
-    text-align: center;
-    transform: translateY(100%);
-    transition: var(--hover-transition);
-    font-size: 0.9rem;
-    z-index: 5;
+    content: '';
+    width: 20px;
+    height: 20px;
+    background: radial-gradient(circle, rgba(212, 170, 55, 0.8) 0%, rgba(212, 170, 55, 0.2) 70%, transparent 100%);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    filter: blur(2px);
+    opacity: 0;
+    transition: opacity 0.3s ease;
 }
 
 .ceiling-link:hover::after {
-    transform: translateY(0);
+    opacity: 1;
 }
 
 .center-design .ceiling-link::after {
@@ -1899,28 +1930,26 @@ footer .logo:hover {
     display: block;
     position: relative;
     overflow: hidden;
-    border-radius: 10px 10px 0 0;
-    cursor: pointer;
+    cursor: none;
 }
 
 .artifact-link::after {
-    content: '查看大图';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: rgba(0, 0, 0, 0.7);
-    color: var(--primary-color);
-    padding: 10px;
-    text-align: center;
-    transform: translateY(100%);
-    transition: var(--hover-transition);
-    font-size: 0.9rem;
-    z-index: 5;
+    content: '';
+    width: 20px;
+    height: 20px;
+    background: radial-gradient(circle, rgba(212, 170, 55, 0.8) 0%, rgba(212, 170, 55, 0.2) 70%, transparent 100%);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    filter: blur(2px);
+    opacity: 0;
+    transition: opacity 0.3s ease;
 }
 
 .artifact-link:hover::after {
-    transform: translateY(0);
+    opacity: 1;
 }
 
 /* Title character animations - simplified */
@@ -2047,91 +2076,8 @@ footer .logo:hover {
 
 /* Add interactive sparkle effect on mouse movement */
 .sparkle {
-    position: absolute;
-    width: 6px;
-    height: 6px;
-    background-color: var(--primary-color);
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 10;
-    opacity: 0;
-    transform: scale(0);
-    animation: sparkle-fade 0.8s ease-out forwards;
+    display: none;
 }
-
-@keyframes sparkle-fade {
-    0% {
-        opacity: 1;
-        transform: scale(0);
-    }
-    50% {
-        opacity: 0.8;
-        transform: scale(1);
-    }
-    100% {
-        opacity: 0;
-        transform: scale(1.5);
-    }
-}
-
-/* Floating elements styles - removed as requested 
-.floating-elements {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 1;
-    pointer-events: none;
-}
-
-.floating-element {
-    position: absolute;
-    width: 150px;
-    height: 150px;
-    background-size: contain;
-    background-position: center;
-    background-repeat: no-repeat;
-    opacity: 0.5;
-    animation: float 20s infinite ease-in-out;
-    filter: drop-shadow(0 0 15px rgba(212, 170, 55, 0.3));
-}
-
-.floating-element.mask {
-    background-image: url('images/qingtongzongmua.png');
-    transform-origin: center center;
-}
-
-.floating-element.bird {
-    background-image: url('images/taiyang.png');
-    width: 100px;
-    height: 100px;
-}
-
-.floating-element.tree {
-    background-image: url('images/qingtongshenshu.png');
-    width: 180px;
-    height: 180px;
-}
-
-@keyframes float {
-    0% {
-        transform: translateY(0) translateX(0) rotate(0deg);
-    }
-    25% {
-        transform: translateY(-15px) translateX(10px) rotate(5deg);
-    }
-    50% {
-        transform: translateY(0) translateX(20px) rotate(0deg);
-    }
-    75% {
-        transform: translateY(15px) translateX(10px) rotate(-5deg);
-    }
-    100% {
-        transform: translateY(0) translateX(0) rotate(0deg);
-    }
-}
-*/
 
 /* Add background for intro section */
 .intro-bg {
@@ -2162,35 +2108,37 @@ footer .logo:hover {
     background: rgba(29, 29, 31, 0.8);
     border-radius: 15px;
     padding: 40px 30px;
-    text-align: center;
+    text-align: left;
     backdrop-filter: blur(10px);
-    border: 1px solid rgba(212, 170, 55, 0.2);
-    transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+    border: none !important;
+    border-left: none !important;
+    border-right: none !important;
+    border-top: none !important;
+    border-bottom: none !important;
+    transition: var(--hover-transition);
     position: relative;
     overflow: hidden;
+    box-shadow: none;
 }
 
-.concept-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(45deg, rgba(212, 170, 55, 0.1), transparent);
-    opacity: 0;
-    transition: opacity 0.6s ease;
+.concept-card::before,
+.concept-card::after {
+    border: none !important;
+    border-left: none !important;
 }
 
 .concept-card:hover {
     transform: translateY(-10px);
-    border-color: rgba(212, 170, 55, 0.4);
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4),
                 0 0 30px rgba(212, 170, 55, 0.2);
+    border: none !important;
+    border-left: none !important;
 }
 
 .concept-card:hover::before {
     opacity: 1;
+    border: none !important;
+    border-left: none !important;
 }
 
 .card-number {
@@ -2201,6 +2149,7 @@ footer .logo:hover {
     font-family: 'Noto Serif SC', serif;
     opacity: 0.8;
     transition: all 0.4s ease;
+    text-align: left;
 }
 
 .concept-card:hover .card-number {
@@ -2215,22 +2164,16 @@ footer .logo:hover {
     position: relative;
     display: inline-block;
     font-weight: 500;
+    text-align: left;
 }
 
+/* 移除下划线效果 */
 .concept-card h3::after {
-    content: '';
-    position: absolute;
-    bottom: -8px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 0;
-    height: 2px;
-    background-color: var(--primary-color);
-    transition: width 0.4s ease;
+    display: none;
 }
 
 .concept-card:hover h3::after {
-    width: 80%;
+    width: 0;
 }
 
 .concept-card p {
@@ -2240,10 +2183,15 @@ footer .logo:hover {
     margin: 0;
     opacity: 0.9;
     transition: opacity 0.4s ease;
+    text-align: left;
+    border-bottom: none;
 }
 
-.concept-card:hover p {
-    opacity: 1;
+/* 确保没有其他元素添加边框 */
+.concept-card *,
+.concept-card *::before,
+.concept-card *::after {
+    border: none;
 }
 
 /* Responsive styles for concept cards */
